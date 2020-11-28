@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.fragments;
+package com.hitesh.whatsapp.fragments;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,11 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.hitesh.whatssappclone.Contacts;
-import com.hitesh.whatssappclone.CountryToPhonePrefix;
-import com.hitesh.whatssappclone.R;
-import com.hitesh.whatssappclone.activities.MainActivity;
-import com.hitesh.whatssappclone.adapters.ContactsAdapter;
+import com.hitesh.whatsapp.Contacts;
+import com.hitesh.whatsapp.CountryToPhonePrefix;
+import com.hitesh.whatsapp.R;
+import com.hitesh.whatsapp.activities.MainActivity;
+import com.hitesh.whatsapp.adapters.ContactsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

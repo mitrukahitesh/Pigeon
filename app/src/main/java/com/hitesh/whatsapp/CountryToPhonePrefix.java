@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone;
+package com.hitesh.whatsapp;
 
 import java.util.HashMap;
 import java.util.Map;

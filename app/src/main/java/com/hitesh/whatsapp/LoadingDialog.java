@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone;
+package com.hitesh.whatsapp;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.activities;
+package com.hitesh.whatsapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +22,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.hitesh.whatssappclone.R;
+import com.hitesh.whatsapp.R;
 
 import java.util.concurrent.TimeUnit;
 

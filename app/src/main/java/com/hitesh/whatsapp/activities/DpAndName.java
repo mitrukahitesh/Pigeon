@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.activities;
+package com.hitesh.whatsapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatssappclone.LoadingDialog;
-import com.hitesh.whatssappclone.R;
-import com.hitesh.whatssappclone.activities.MainActivity;
+import com.hitesh.whatsapp.LoadingDialog;
+import com.hitesh.whatsapp.R;
 
 import java.util.HashMap;
 import java.util.Objects;

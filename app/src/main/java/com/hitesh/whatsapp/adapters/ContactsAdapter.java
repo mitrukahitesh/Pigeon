@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.adapters;
+package com.hitesh.whatsapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatssappclone.Contacts;
-import com.hitesh.whatssappclone.R;
-import com.hitesh.whatssappclone.activities.ChatActivity;
-import com.hitesh.whatssappclone.activities.MainActivity;
+import com.hitesh.whatsapp.Contacts;
+import com.hitesh.whatsapp.R;
+import com.hitesh.whatsapp.activities.ChatActivity;
+import com.hitesh.whatsapp.activities.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -100,11 +106,51 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Custom
         intent.putExtra(RECEIVER_NAME, contacts.get(adapterPosition).getName());
         intent.putExtra(RECEIVER_NUMBER, contacts.get(adapterPosition).getNumber());
         intent.putExtra(RECEIVER_UID, contacts.get(adapterPosition).getUid());
-        if(dpUri.containsKey(contacts.get(adapterPosition).getNumber())) {
+        if (dpUri.containsKey(contacts.get(adapterPosition).getNumber())) {
             intent.putExtra(RECEIVER_DP_URI, dpUri.get(contacts.get(adapterPosition).getNumber()).toString());
         } else {
             intent.putExtra(RECEIVER_DP_URI, "");
         }
+        createUniqueChatIdIfNotCreated(adapterPosition);
         context.startActivity(intent);
+    }
+
+    private void createUniqueChatIdIfNotCreated(final int position) {
+        DatabaseReference reference =
+                FirebaseDatabase.getInstance().getReference()
+                        .child(MainActivity.USERS)
+                        .child(MainActivity.mAuth.getUid())
+                        .child(MainActivity.CHATS);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    if(childSnapshot.getKey().equals(contacts.get(position).getUid()))
+                        return;
+                }
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                        .child(MainActivity.CHATS)
+                        .push();
+                reference.setValue(true);
+                String uniqueId = reference.getKey();
+                FirebaseDatabase.getInstance().getReference()
+                        .child(MainActivity.USERS)
+                        .child(MainActivity.mAuth.getUid())
+                        .child(MainActivity.CHATS)
+                        .child(contacts.get(position).getUid())
+                        .setValue(uniqueId);
+                FirebaseDatabase.getInstance().getReference()
+                        .child(MainActivity.USERS)
+                        .child(contacts.get(position).getUid())
+                        .child(MainActivity.CHATS)
+                        .child(MainActivity.mAuth.getUid())
+                        .setValue(uniqueId);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

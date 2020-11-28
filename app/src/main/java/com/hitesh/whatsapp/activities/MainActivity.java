@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.activities;
+package com.hitesh.whatsapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hitesh.whatssappclone.R;
-import com.hitesh.whatssappclone.adapters.TabsAccessorAdapter;
+import com.hitesh.whatsapp.R;
+import com.hitesh.whatsapp.adapters.TabsAccessorAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String NAME = "NAME";
     public static final String DP = "DP";
     public static final String LAST_SEEN = "LAST SEEN";
+    public static final String CHATS = "CHATS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +55,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         if (mAuth.getCurrentUser() != null)
-            setLoginStatus();
+            setLoginStatus(true);
+        super.onResume();
     }
 
-    public static void setLoginStatus() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(mUser.getUid());
-        reference.setValue(0);
-        reference.onDisconnect().setValue(System.currentTimeMillis());
+    public static void setLoginStatus(boolean online) {
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(mUser.getUid());
+        if (online)
+            reference.setValue(0);
+        else
+            reference.setValue(System.currentTimeMillis());
+    }
+
+    @Override
+    protected void onPause() {
+        if (mAuth.getCurrentUser() != null)
+            setLoginStatus(false);
+        super.onPause();
     }
 
     private void checkLoginStatus() {

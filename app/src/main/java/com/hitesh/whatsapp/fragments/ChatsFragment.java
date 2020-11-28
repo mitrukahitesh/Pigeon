@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.fragments;
+package com.hitesh.whatsapp.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.hitesh.whatssappclone.R;
+import com.hitesh.whatsapp.R;
 
-public class GroupsFragment extends Fragment {
 
-    public GroupsFragment() {
+public class ChatsFragment extends Fragment {
+
+    public ChatsFragment() {
         // Required empty public constructor
     }
 
@@ -24,6 +25,6 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_groups, container, false);
+        return inflater.inflate(R.layout.fragment_chats, container, false);
     }
 }

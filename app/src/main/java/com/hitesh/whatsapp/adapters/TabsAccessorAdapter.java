@@ -1,13 +1,13 @@
-package com.hitesh.whatssappclone.adapters;
+package com.hitesh.whatsapp.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.hitesh.whatssappclone.fragments.ChatsFragment;
-import com.hitesh.whatssappclone.fragments.ContactsFragment;
-import com.hitesh.whatssappclone.fragments.GroupsFragment;
+import com.hitesh.whatsapp.fragments.ChatsFragment;
+import com.hitesh.whatsapp.fragments.ContactsFragment;
+import com.hitesh.whatsapp.fragments.GroupsFragment;
 
 public class TabsAccessorAdapter extends FragmentStateAdapter {
 

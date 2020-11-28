@@ -1,4 +1,4 @@
-package com.hitesh.whatssappclone.activities;
+package com.hitesh.whatsapp.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -23,8 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatssappclone.R;
-import com.hitesh.whatssappclone.adapters.ContactsAdapter;
+import com.hitesh.whatsapp.R;
+import com.hitesh.whatsapp.adapters.ContactsAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,6 +32,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.hitesh.whatsapp.activities.MainActivity.setLoginStatus;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -108,7 +110,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             private String getDate(Object value) {
-                String date;
+                String date ;
                 TimeZone timeZone = TimeZone.getDefault();
                 Date date1 = new Date((Long) value);
                 SimpleDateFormat sdf = new SimpleDateFormat("H:mm EEE, MMM d", Locale.getDefault());
@@ -122,5 +124,11 @@ public class ChatActivity extends AppCompatActivity {
                 lastSeen.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLoginStatus(true);
     }
 }
