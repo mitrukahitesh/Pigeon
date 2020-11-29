@@ -2,11 +2,10 @@ package com.hitesh.whatsapp.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -30,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hitesh.whatsapp.Messages;
+import com.hitesh.whatsapp.OnlineStatusBR;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.ChatAdapter;
 import com.hitesh.whatsapp.adapters.ContactsAdapter;
@@ -74,10 +74,16 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle("");
+        setBroadcastReceiver();
         setReferences();
         extractIntentData();
         setInfo();
         createChatIdIfNotCreated();
+    }
+
+    private void setBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter(MainActivity.ONLINE_ACTION);
+        registerReceiver(new OnlineStatusBR(), intentFilter);
     }
 
     private void extractIntentData() {
@@ -293,11 +299,5 @@ public class ChatActivity extends AppCompatActivity {
                 lastSeen.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setLoginStatus(true);
     }
 }

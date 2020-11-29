@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hitesh.whatsapp.OnlineStatusBR;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.TabsAccessorAdapter;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DP = "DP";
     public static final String LAST_SEEN = "LAST SEEN";
     public static final String CHATS = "CHATS";
+    public static final String ONLINE_ACTION = "COM.HITESH.WHATSAPP.MAKE_ONLINE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (mAuth.getCurrentUser() != null)
+        if (mAuth.getCurrentUser() != null) {
             setLoginStatus(false);
+            Intent intent = new Intent(this, OnlineStatusBR.class);
+            intent.setAction(ONLINE_ACTION);
+            sendBroadcast(intent);
+        }
         super.onStop();
     }
 
