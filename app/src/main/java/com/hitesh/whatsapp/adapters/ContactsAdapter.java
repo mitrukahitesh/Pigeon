@@ -41,6 +41,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Custom
     public static final String RECEIVER_NUMBER = "RECEIVER_NUMBER";
     public static final String RECEIVER_DP_URI = "RECEIVER_DP_URI";
     public static final String RECEIVER_UID = "RECEIVER_UID";
+    public static final String CHAT_ID = "CHAT_ID";
 
     public ContactsAdapter(Context context, List<Contacts> contacts) {
         this.context = context;
@@ -101,8 +102,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Custom
         }
     }
 
-    private void startChat(int adapterPosition) {
-        Intent intent = new Intent(context, ChatActivity.class);
+    private void startChat(final int adapterPosition) {
+        final Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(RECEIVER_NAME, contacts.get(adapterPosition).getName());
         intent.putExtra(RECEIVER_NUMBER, contacts.get(adapterPosition).getNumber());
         intent.putExtra(RECEIVER_UID, contacts.get(adapterPosition).getUid());
@@ -111,46 +112,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Custom
         } else {
             intent.putExtra(RECEIVER_DP_URI, "");
         }
-        createUniqueChatIdIfNotCreated(adapterPosition);
         context.startActivity(intent);
-    }
-
-    private void createUniqueChatIdIfNotCreated(final int position) {
-        DatabaseReference reference =
-                FirebaseDatabase.getInstance().getReference()
-                        .child(MainActivity.USERS)
-                        .child(MainActivity.mAuth.getUid())
-                        .child(MainActivity.CHATS);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    if(childSnapshot.getKey().equals(contacts.get(position).getUid()))
-                        return;
-                }
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                        .child(MainActivity.CHATS)
-                        .push();
-                reference.setValue(true);
-                String uniqueId = reference.getKey();
-                FirebaseDatabase.getInstance().getReference()
-                        .child(MainActivity.USERS)
-                        .child(MainActivity.mAuth.getUid())
-                        .child(MainActivity.CHATS)
-                        .child(contacts.get(position).getUid())
-                        .setValue(uniqueId);
-                FirebaseDatabase.getInstance().getReference()
-                        .child(MainActivity.USERS)
-                        .child(contacts.get(position).getUid())
-                        .child(MainActivity.CHATS)
-                        .child(MainActivity.mAuth.getUid())
-                        .setValue(uniqueId);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 }
