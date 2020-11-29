@@ -2,9 +2,10 @@ package com.hitesh.whatsapp.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hitesh.whatsapp.Messages;
-import com.hitesh.whatsapp.OnlineStatusBR;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.ChatAdapter;
 import com.hitesh.whatsapp.adapters.ContactsAdapter;
@@ -45,7 +45,6 @@ import java.util.TimeZone;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.hitesh.whatsapp.activities.MainActivity.mAuth;
-import static com.hitesh.whatsapp.activities.MainActivity.setLoginStatus;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -74,16 +73,28 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle("");
-        setBroadcastReceiver();
         setReferences();
         extractIntentData();
         setInfo();
         createChatIdIfNotCreated();
     }
 
-    private void setBroadcastReceiver() {
-        IntentFilter intentFilter = new IntentFilter(MainActivity.ONLINE_ACTION);
-        registerReceiver(new OnlineStatusBR(), intentFilter);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Handler handler = new Handler(Looper.myLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.setLoginStatus(true);
+            }
+        }, 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MainActivity.setLoginStatus(false);
     }
 
     private void extractIntentData() {

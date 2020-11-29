@@ -3,6 +3,8 @@ package com.hitesh.whatsapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hitesh.whatsapp.OnlineStatusBR;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.TabsAccessorAdapter;
 
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String DP = "DP";
     public static final String LAST_SEEN = "LAST SEEN";
     public static final String CHATS = "CHATS";
-    public static final String ONLINE_ACTION = "COM.HITESH.WHATSAPP.MAKE_ONLINE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +49,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         mAuth = FirebaseAuth.getInstance();
         checkLoginStatus();
+        if (mAuth.getCurrentUser() != null) {
+            Handler handler = new Handler(Looper.myLooper());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setLoginStatus(true);
+                }
+            }, 1000);
+        }
     }
 
     @Override
-    protected void onResume() {
+    protected void onStop() {
         if (mAuth.getCurrentUser() != null)
-            setLoginStatus(true);
-        super.onResume();
+            setLoginStatus(false);
+        super.onStop();
     }
 
     public static void setLoginStatus(boolean online) {
@@ -68,17 +77,6 @@ public class MainActivity extends AppCompatActivity {
             reference.setValue(0);
         else
             reference.setValue(System.currentTimeMillis());
-    }
-
-    @Override
-    protected void onStop() {
-        if (mAuth.getCurrentUser() != null) {
-            setLoginStatus(false);
-            Intent intent = new Intent(this, OnlineStatusBR.class);
-            intent.setAction(ONLINE_ACTION);
-            sendBroadcast(intent);
-        }
-        super.onStop();
     }
 
     private void checkLoginStatus() {
