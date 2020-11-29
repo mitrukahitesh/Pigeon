@@ -69,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
         if (mAuth.getCurrentUser() != null)
             setLoginStatus(false);
-        super.onPause();
+        super.onStop();
     }
 
     private void checkLoginStatus() {
