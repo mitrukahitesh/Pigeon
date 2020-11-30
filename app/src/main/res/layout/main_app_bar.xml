@@ -10,5 +10,6 @@
     android:minHeight="?attr/actionBarSize"
     android:theme="?attr/actionBarTheme"
     app:layout_constraintTop_toTopOf="parent"
+    app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
     app:title="@string/app_name"
     app:titleTextColor="@color/colorAccent" />
