@@ -1,5 +1,5 @@
 # WhatsApp-Clone
-Tried to implement some features of WhatsApp in this android chat app written with Java. Firebase is used for backend.
+Implemented some features of WhatsApp in this android chat app written with Java. Firebase is used for backend.
 Features include:
 - Phone number authentication
 - Listing the users from phone's contact list that are registered with this app
