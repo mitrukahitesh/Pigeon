@@ -242,15 +242,13 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage() {
         String message = msg.getText().toString();
         msg.setText("");
-        if (message != null) {
-            if (!message.trim().equals("")) {
-                HashMap<String, Object> msgInfo = new HashMap<>();
-                msgInfo.put(SENDER, mAuth.getUid());
-                msgInfo.put(MESSAGE, message);
-                msgInfo.put(TYPE, 0);
-                msgInfo.put(TIME, System.currentTimeMillis());
-                database.getReference().child(MainActivity.CHATS).child(chatId).push().updateChildren(msgInfo);
-            }
+        if (!message.trim().equals("")) {
+            HashMap<String, Object> msgInfo = new HashMap<>();
+            msgInfo.put(SENDER, mAuth.getUid());
+            msgInfo.put(MESSAGE, message);
+            msgInfo.put(TYPE, 0);
+            msgInfo.put(TIME, System.currentTimeMillis());
+            database.getReference().child(MainActivity.CHATS).child(chatId).push().updateChildren(msgInfo);
         }
     }
 

@@ -105,8 +105,29 @@ public class ChatsFragment extends Fragment {
                 if (dataSnapshot.exists()) {
                     String uid = dataSnapshot.getKey();
                     String chatId = dataSnapshot.getValue().toString();
-                    getNumberFromUid(new AvailableChats(uid, chatId));
+                    getNumberFromUidIfMessagesExist(new AvailableChats(uid, chatId));
                 }
+            }
+
+            private void getNumberFromUidIfMessagesExist(final AvailableChats availableChats) {
+                database.getReference()
+                        .child(MainActivity.CHATS)
+                        .child(availableChats.chatId)
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()) {
+                                    if(dataSnapshot.hasChildren()) {
+                                        getNumberFromUid(availableChats);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
             }
 
             private void getNumberFromUid(final AvailableChats chat) {
