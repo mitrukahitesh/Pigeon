@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,29 +56,29 @@ public class ChatsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
         recycler = view.findViewById(R.id.recycler);
-        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
             return view;
         initialSetup();
         return view;
     }
 
     private void initialSetup() {
-        if(getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             database = FirebaseDatabase.getInstance();
             recycler.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new ChatsAdapter(getContext(), availableChats);
             recycler.setAdapter(adapter);
             getChatList();
         } else {
-            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS}, 1);
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 1) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 initialSetup();
         }
     }
@@ -87,7 +86,7 @@ public class ChatsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(recycler.getAdapter() == null) {
+        if (recycler.getAdapter() == null) {
             initialSetup();
         }
     }
@@ -116,9 +115,10 @@ public class ChatsFragment extends Fragment {
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()) {
-                                    if(dataSnapshot.hasChildren()) {
-                                        getNumberFromUid(availableChats);
+                                if (dataSnapshot.exists()) {
+                                    if (dataSnapshot.hasChildren()) {
+                                        if (availableChats.number == null)
+                                            getNumberFromUid(availableChats);
                                     }
                                 }
                             }
