@@ -23,10 +23,8 @@ public class TabsAccessorAdapter extends FragmentStateAdapter {
                 return new ChatsFragment();
             case 1:
                 return new GroupsFragment();
-            case 2:
-                return new ContactsFragment();
             default:
-                return null;
+                return new ContactsFragment();
         }
     }
 

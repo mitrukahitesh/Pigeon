@@ -1,7 +1,5 @@
 package com.hitesh.whatsapp.fragments;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,13 +23,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.hitesh.whatsapp.AvailableChats;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.activities.MainActivity;
 import com.hitesh.whatsapp.adapters.ChatsAdapter;
+import com.hitesh.whatsapp.model.AvailableChats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ChatsFragment extends Fragment {
@@ -39,7 +38,7 @@ public class ChatsFragment extends Fragment {
     private RecyclerView recycler;
     private ChatsAdapter adapter;
     private FirebaseDatabase database;
-    private List<AvailableChats> availableChats = new ArrayList<>();
+    private final List<AvailableChats> availableChats = new ArrayList<>();
 
 
     public ChatsFragment() {
@@ -63,24 +62,11 @@ public class ChatsFragment extends Fragment {
     }
 
     private void initialSetup() {
-        if (getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            database = FirebaseDatabase.getInstance();
-            recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new ChatsAdapter(getContext(), availableChats);
-            recycler.setAdapter(adapter);
-            getChatList();
-        } else {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                initialSetup();
-        }
+        database = FirebaseDatabase.getInstance();
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ChatsAdapter(getContext(), availableChats);
+        recycler.setAdapter(adapter);
+        getChatList();
     }
 
     @Override
@@ -96,14 +82,14 @@ public class ChatsFragment extends Fragment {
                 database
                         .getReference()
                         .child(MainActivity.USERS)
-                        .child(MainActivity.mAuth.getUid())
+                        .child(Objects.requireNonNull(MainActivity.mAuth.getUid()))
                         .child(MainActivity.CHATS);
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.exists()) {
                     String uid = dataSnapshot.getKey();
-                    String chatId = dataSnapshot.getValue().toString();
+                    String chatId = Objects.requireNonNull(dataSnapshot.getValue()).toString();
                     getNumberFromUidIfMessagesExist(new AvailableChats(uid, chatId));
                 }
             }
@@ -136,7 +122,7 @@ public class ChatsFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            chat.number = dataSnapshot.child(MainActivity.PHONE).getValue().toString();
+                            chat.number = Objects.requireNonNull(dataSnapshot.child(MainActivity.PHONE).getValue()).toString();
                             FirebaseStorage.getInstance()
                                     .getReference()
                                     .child(MainActivity.DP)

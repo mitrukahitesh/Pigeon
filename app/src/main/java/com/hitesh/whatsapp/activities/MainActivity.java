@@ -1,10 +1,15 @@
 package com.hitesh.whatsapp.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,16 +27,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hitesh.whatsapp.CountryToPhonePrefix;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.TabsAccessorAdapter;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
-    private Context context;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     public static FirebaseUser mUser;
     public static FirebaseAuth mAuth;
+    public static HashMap<String, String> numberName = new HashMap<>();
+    public static String iso;
     public static final String USERS = "USERS";
     public static final String PHONE = "PHONE";
     public static final String NAME = "NAME";
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fetchContacts();
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setReferences();
         setTabLayout();
@@ -97,9 +107,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-            case R.id.search:
+            case R.id.new_group:
+                //CREATE NEW GROUP
 
             case R.id.setting:
+                //OPEN USER INFO ACTIVITY
 
             default:
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(mUser.getUid());
@@ -110,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                             mAuth.signOut();
                             checkLoginStatus();
                         } else {
-                            Toast.makeText(context, "Same error occurred", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Same error occurred", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -119,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setReferences() {
-        context = this;
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
     }
@@ -144,8 +155,60 @@ public class MainActivity extends AppCompatActivity {
         mediator.attach();
     }
 
+    private void fetchContacts() {
+        if(checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            setContactList();
+        } else {
+            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 1) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getISO();
+                setContactList();
+            }
+        }
+    }
+
+    private void setContactList() {
+        String[] projection = new String[]{
+                ContactsContract.Contacts.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER};
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int nameID = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                int numberID = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                do {
+                    String n = cursor.getString(numberID);
+                    if (n.charAt(0) != '+') {
+                        n = iso + n;
+                    }
+                    n = n.replace(" ", "");
+                    n = n.replace("-", "");
+                    n = n.replace("(", "");
+                    n = n.replace(")", "");
+                    numberName.put(n, cursor.getString(nameID));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+    }
+
+    private void getISO() {
+        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (manager.getNetworkCountryIso() != null)
+            if (!manager.getNetworkCountryIso().equals("")) {
+                iso = manager.getNetworkCountryIso();
+                iso = CountryToPhonePrefix.getPhone(iso);
+            }
+    }
+
     private void setUser() {
-        Intent intent = new Intent(context, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 }

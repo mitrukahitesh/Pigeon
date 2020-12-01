@@ -14,29 +14,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatsapp.Contacts;
+import com.hitesh.whatsapp.model.Contacts;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.activities.ChatActivity;
 import com.hitesh.whatsapp.activities.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.CustomVH> {
 
     private final Context context;
-    private List<Contacts> contacts;
-    private HashMap<String, Uri> dpUri = new HashMap<>();
+    private final List<Contacts> contacts;
+    private final HashMap<String, Uri> dpUri = new HashMap<>();
     public static final String RECEIVER_NAME = "RECEIVER_NAME";
     public static final String RECEIVER_NUMBER = "RECEIVER_NUMBER";
     public static final String RECEIVER_DP_URI = "RECEIVER_DP_URI";
@@ -90,9 +85,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Custom
 
         public CustomVH(@NonNull View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.name);
-            number = (TextView) itemView.findViewById(R.id.number);
-            imageView = (CircleImageView) itemView.findViewById(R.id.dp);
+            name = itemView.findViewById(R.id.name);
+            number = itemView.findViewById(R.id.number);
+            imageView = itemView.findViewById(R.id.dp);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,7 +103,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Custom
         intent.putExtra(RECEIVER_NUMBER, contacts.get(adapterPosition).getNumber());
         intent.putExtra(RECEIVER_UID, contacts.get(adapterPosition).getUid());
         if (dpUri.containsKey(contacts.get(adapterPosition).getNumber())) {
-            intent.putExtra(RECEIVER_DP_URI, dpUri.get(contacts.get(adapterPosition).getNumber()).toString());
+            intent.putExtra(RECEIVER_DP_URI, Objects.requireNonNull(dpUri.get(contacts.get(adapterPosition).getNumber())).toString());
         } else {
             intent.putExtra(RECEIVER_DP_URI, "");
         }

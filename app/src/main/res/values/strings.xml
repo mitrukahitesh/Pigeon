@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Whatssapp Clone</string>
+    <string name="app_name">WhatsApp Clone</string>
     <string name="hint_phone">+9779800000000</string>
     <string name="hint_code">--- ---</string>
     <string name="verify">Send Code</string>
     <string name="enterCode">Enter the code sent</string>
     <string name="login_head">Verify your phone number</string>
     <string name="login_description">WhatsApp Clone will send an SMS message(carrier charges may apply) to verify your phone number. Enter the country code and phone number.</string>
-    <string name="search">Search</string>
+    <string name="new_group">New Group</string>
     <string name="setting">Setting</string>
     <string name="logout">Logout</string>
     <string name="dp_head">Profile picture and name</string>

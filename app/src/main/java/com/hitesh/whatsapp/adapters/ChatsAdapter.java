@@ -2,9 +2,6 @@ package com.hitesh.whatsapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.provider.ContactsContract;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,70 +18,31 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hitesh.whatsapp.AvailableChats;
-import com.hitesh.whatsapp.CountryToPhonePrefix;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.activities.ChatActivity;
 import com.hitesh.whatsapp.activities.MainActivity;
+import com.hitesh.whatsapp.model.AvailableChats;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
 
-    private Context context;
-    private List<AvailableChats> availableChats = new ArrayList<>();
-    private HashMap<String, String> numberName = new HashMap<>();
-    private HashMap<String, String> lastMessage = new HashMap<>();
-    private HashMap<String, String> timeOfMessage = new HashMap<>();
-    private String iso = null;
+    private final Context context;
+    private final List<AvailableChats> availableChats;
+    private final HashMap<String, String> lastMessage = new HashMap<>();
+    private final HashMap<String, String> timeOfMessage = new HashMap<>();
 
     public ChatsAdapter(Context context, List<AvailableChats> availableChats) {
         this.context = context;
         this.availableChats = availableChats;
-        getISO();
-        setContactList();
-    }
-
-    private void setContactList() {
-        String[] projection = new String[]{
-                ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Phone.NUMBER};
-        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                int nameID = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                int numberID = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                do {
-                    String n = cursor.getString(numberID);
-                    if (n.charAt(0) != '+') {
-                        n = iso + n;
-                    }
-                    n = n.replace(" ", "");
-                    n = n.replace("-", "");
-                    n = n.replace("(", "");
-                    n = n.replace(")", "");
-                    numberName.put(n, cursor.getString(nameID));
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-        }
-    }
-
-    private void getISO() {
-        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (manager.getNetworkCountryIso() != null)
-            if (!manager.getNetworkCountryIso().equals("")) {
-                iso = manager.getNetworkCountryIso();
-                iso = CountryToPhonePrefix.getPhone(iso);
-            }
     }
 
     @NonNull
@@ -96,8 +54,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
 
     @Override
     public void onBindViewHolder(@NonNull CustomVH holder, int position) {
-        if (numberName.containsKey(availableChats.get(position).number)) {
-            holder.name.setText(numberName.get(availableChats.get(position).number));
+        if (MainActivity.numberName.containsKey(availableChats.get(position).number)) {
+            holder.name.setText(MainActivity.numberName.get(availableChats.get(position).number));
         } else {
             holder.name.setText(availableChats.get(position).number);
         }
@@ -133,7 +91,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         if (dataSnapshot.exists()) {
-                            lastMessage.put(availableChats.get(position).number, dataSnapshot.child(ChatActivity.MESSAGE).getValue().toString());
+                            lastMessage.put(availableChats.get(position).number, Objects.requireNonNull(dataSnapshot.child(ChatActivity.MESSAGE).getValue()).toString());
                             timeOfMessage.put(availableChats.get(position).number, getDate((Long) dataSnapshot.child(ChatActivity.TIME).getValue()));
                             notifyItemChanged(position);
                         }
@@ -197,8 +155,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
 
     private void startChat(int adapterPosition) {
         final Intent intent = new Intent(context, ChatActivity.class);
-        if (numberName.containsKey(availableChats.get(adapterPosition).number)) {
-            intent.putExtra(ContactsAdapter.RECEIVER_NAME, numberName.get(availableChats.get(adapterPosition).number));
+        if (MainActivity.numberName.containsKey(availableChats.get(adapterPosition).number)) {
+            intent.putExtra(ContactsAdapter.RECEIVER_NAME, MainActivity.numberName.get(availableChats.get(adapterPosition).number));
         } else {
             intent.putExtra(ContactsAdapter.RECEIVER_NAME, availableChats.get(adapterPosition).number);
         }

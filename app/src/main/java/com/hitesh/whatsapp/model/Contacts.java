@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp;
+package com.hitesh.whatsapp.model;
 
 public class Contacts {
 

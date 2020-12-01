@@ -29,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatsapp.Messages;
+import com.hitesh.whatsapp.model.Messages;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.ChatAdapter;
 import com.hitesh.whatsapp.adapters.ContactsAdapter;

@@ -10,21 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hitesh.whatsapp.Messages;
+import com.hitesh.whatsapp.model.Messages;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.activities.MainActivity;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.CutomVH> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.CustomVH> {
 
     Context context;
-    List<Messages> messages = new ArrayList<>();
+    List<Messages> messages;
 
     public ChatAdapter(Context context, List<Messages> messages) {
         this.context = context;
@@ -33,13 +32,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.CutomVH> {
 
     @NonNull
     @Override
-    public CutomVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_view, parent, false);
-        return new CutomVH(view);
+        return new CustomVH(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CutomVH holder, int position) {
+    public void onBindViewHolder(@NonNull CustomVH holder, int position) {
         TextView msg, time;
         if(messages.get(position).getSENDER().equals(MainActivity.mAuth.getUid())) {
             holder.boxReceived.setVisibility(View.GONE);
@@ -70,12 +69,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.CutomVH> {
         return messages.size();
     }
 
-    public class CutomVH extends RecyclerView.ViewHolder {
+    public class CustomVH extends RecyclerView.ViewHolder {
 
         LinearLayout boxSent, boxReceived;
         TextView msgSent, timeSent, msgReceived, timeReceived;
 
-        public CutomVH(@NonNull View itemView) {
+        public CustomVH(@NonNull View itemView) {
             super(itemView);
             boxSent = itemView.findViewById(R.id.boxSent);
             msgSent = itemView.findViewById(R.id.messageSent);
