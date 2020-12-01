@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    android:paddingStart="5dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="10dp">
+
+    <EditText
+        android:id="@+id/newVal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/code_background"
+        android:hint="@string/type_your_info"
+        android:padding="8dp"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:textSize="14sp" />
+
+</LinearLayout>

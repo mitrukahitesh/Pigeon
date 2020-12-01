@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp;
+package com.hitesh.whatsapp.utility;
 
 import java.util.HashMap;
 import java.util.Map;

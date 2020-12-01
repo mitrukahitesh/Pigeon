@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.activities.ChatActivity;
+import com.hitesh.whatsapp.activities.InfoActivity;
 import com.hitesh.whatsapp.activities.MainActivity;
 import com.hitesh.whatsapp.model.AvailableChats;
 
@@ -150,7 +151,20 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
                     startChat(getAdapterPosition());
                 }
             });
+            dp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDescription(getAdapterPosition());
+                }
+            });
         }
+    }
+
+    private void showDescription(int pos) {
+        Intent intent = new Intent(context, InfoActivity.class);
+        intent.putExtra(MainActivity.UID, availableChats.get(pos).uid);
+        intent.putExtra(MainActivity.EDITABLE, false);
+        context.startActivity(intent);
     }
 
     private void startChat(int adapterPosition) {

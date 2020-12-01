@@ -24,29 +24,33 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hitesh.whatsapp.CountryToPhonePrefix;
 import com.hitesh.whatsapp.R;
 import com.hitesh.whatsapp.adapters.TabsAccessorAdapter;
+import com.hitesh.whatsapp.utility.CountryToPhonePrefix;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
-    public static FirebaseUser mUser;
     public static FirebaseAuth mAuth;
     public static HashMap<String, String> numberName = new HashMap<>();
     public static String iso;
     public static final String USERS = "USERS";
     public static final String PHONE = "PHONE";
     public static final String NAME = "NAME";
+    public static final String STATUS = "STATUS";
+    public static final String INITIAL_STATUS = "Hey there! I am using WhatsApp Clone.";
     public static final String DP = "DP";
     public static final String LAST_SEEN = "LAST SEEN";
     public static final String CHATS = "CHATS";
+    public static final String GROUPS = "GROUPS";
+    public static final String EDITABLE = "EDITABLE";
+    public static final String UID = "UID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void setLoginStatus(boolean online) {
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(mUser.getUid());
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
         if (online)
             reference.setValue(0);
         else
@@ -90,10 +94,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLoginStatus() {
-        mUser = mAuth.getCurrentUser();
-        if (mUser == null) {
+        if (mAuth.getCurrentUser() == null) {
             setUser();
-            mUser = mAuth.getCurrentUser();
         }
     }
 
@@ -106,26 +108,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.new_group:
-                //CREATE NEW GROUP
-
-            case R.id.setting:
-                //OPEN USER INFO ACTIVITY
-
-            default:
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(mUser.getUid());
-                reference.setValue(System.currentTimeMillis()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            mAuth.signOut();
-                            checkLoginStatus();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Same error occurred", Toast.LENGTH_LONG).show();
-                        }
+        if (item.getItemId() == R.id.new_group) {
+            Intent intent = new Intent(this, GroupCreationActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.my_info) {
+            Intent intent = new Intent(this, InfoActivity.class);
+            intent.putExtra(UID, mAuth.getUid());
+            intent.putExtra(EDITABLE, true);
+            startActivity(intent);
+        } else {
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(LAST_SEEN).child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+            reference.setValue(System.currentTimeMillis()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        mAuth.signOut();
+                        checkLoginStatus();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Same error occurred", Toast.LENGTH_LONG).show();
                     }
-                });
+                }
+            });
         }
         return true;
     }
@@ -156,17 +159,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchContacts() {
-        if(checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             setContactList();
         } else {
-            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS}, 1);
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 1) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getISO();
                 setContactList();
             }

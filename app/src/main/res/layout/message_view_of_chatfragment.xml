@@ -4,7 +4,7 @@
     android:id="@+id/box"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="8dp"
     android:gravity="center">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -20,6 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:background="@drawable/bottom_border"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="4dp">
@@ -46,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -58,7 +60,6 @@
             android:maxLines="1"
             android:paddingStart="5dp"
             android:paddingEnd="0dp"
-            android:textColor="@android:color/darker_gray"
             android:textSize="14sp" />
 
     </LinearLayout>

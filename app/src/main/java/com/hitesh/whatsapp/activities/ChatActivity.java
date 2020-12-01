@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView name, lastSeen;
     private RecyclerView recycler;
     private EditText msg;
+    private LinearLayout nameAndLastSeen;
     private ImageButton send;
     private FirebaseDatabase database;
     private String _name, number, uid, uri, chatId;
@@ -222,6 +224,13 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         mIntent = getIntent();
         dp = findViewById(R.id.dp);
+        nameAndLastSeen = findViewById(R.id.nameAndLastSeen);
+        nameAndLastSeen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDescription();
+            }
+        });
         name = findViewById(R.id.name);
         lastSeen = findViewById(R.id.lastSeen);
         lastSeen.setVisibility(View.GONE);
@@ -237,6 +246,13 @@ public class ChatActivity extends AppCompatActivity {
                 sendMessage();
             }
         });
+    }
+
+    private void showDescription() {
+        Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra(MainActivity.UID, uid);
+        intent.putExtra(MainActivity.EDITABLE, false);
+        startActivity(intent);
     }
 
     private void sendMessage() {

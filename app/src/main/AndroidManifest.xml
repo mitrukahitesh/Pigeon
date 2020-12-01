@@ -12,10 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.hitesh.whatsapp.activities.ChatActivity"></activity>
-        <activity android:name="com.hitesh.whatsapp.activities.DpAndName" />
-        <activity android:name="com.hitesh.whatsapp.activities.LoginActivity" />
-        <activity android:name="com.hitesh.whatsapp.activities.MainActivity">
+        <activity android:name=".activities.InfoActivity"></activity>
+        <activity android:name=".activities.GroupDetailsActivity" />
+        <activity android:name=".activities.GroupCreationActivity" />
+        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.DpAndName" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

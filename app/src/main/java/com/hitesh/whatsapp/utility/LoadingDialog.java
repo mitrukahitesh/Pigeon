@@ -1,8 +1,10 @@
-package com.hitesh.whatsapp;
+package com.hitesh.whatsapp.utility;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
+
+import com.hitesh.whatsapp.R;
 
 public class LoadingDialog {
 
