@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.adapters;
+package com.hitesh.pigeon.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +18,11 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.activities.ChatActivity;
-import com.hitesh.whatsapp.activities.InfoActivity;
-import com.hitesh.whatsapp.activities.MainActivity;
-import com.hitesh.whatsapp.model.AvailableChats;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.activities.ChatActivity;
+import com.hitesh.pigeon.activities.InfoActivity;
+import com.hitesh.pigeon.activities.MainActivity;
+import com.hitesh.pigeon.model.AvailableChats;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

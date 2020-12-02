@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.adapters;
+package com.hitesh.pigeon.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hitesh.whatsapp.model.Messages;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.activities.MainActivity;
+import com.hitesh.pigeon.model.Messages;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.activities.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

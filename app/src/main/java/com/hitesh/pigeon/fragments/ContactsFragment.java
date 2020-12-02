@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.fragments;
+package com.hitesh.pigeon.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,10 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.activities.MainActivity;
-import com.hitesh.whatsapp.adapters.ContactsAdapter;
-import com.hitesh.whatsapp.model.Contacts;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.activities.MainActivity;
+import com.hitesh.pigeon.adapters.ContactsAdapter;
+import com.hitesh.pigeon.model.Contacts;
 
 import java.util.ArrayList;
 import java.util.List;

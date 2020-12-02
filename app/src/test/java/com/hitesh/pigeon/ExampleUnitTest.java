@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp;
+package com.hitesh.pigeon;
 
 import org.junit.Test;
 

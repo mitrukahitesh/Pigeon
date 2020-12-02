@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.activities;
+package com.hitesh.pigeon.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -30,10 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatsapp.model.Messages;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.adapters.ChatAdapter;
-import com.hitesh.whatsapp.adapters.ContactsAdapter;
+import com.hitesh.pigeon.model.Messages;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.adapters.ChatAdapter;
+import com.hitesh.pigeon.adapters.ContactsAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.hitesh.whatsapp.activities.MainActivity.mAuth;
+import static com.hitesh.pigeon.activities.MainActivity.mAuth;
 
 public class ChatActivity extends AppCompatActivity {
 

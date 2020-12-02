@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.activities;
+package com.hitesh.pigeon.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -26,9 +26,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.adapters.TabsAccessorAdapter;
-import com.hitesh.whatsapp.utility.CountryToPhonePrefix;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.adapters.TabsAccessorAdapter;
+import com.hitesh.pigeon.utility.CountryToPhonePrefix;
 
 import java.util.HashMap;
 import java.util.Objects;

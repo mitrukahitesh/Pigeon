@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WhatsApp Clone</string>
+    <string name="app_name">Pigeon</string>
     <string name="hint_phone">+9779800000000</string>
     <string name="hint_code">--- ---</string>
     <string name="verify">Send Code</string>
@@ -21,4 +21,5 @@
     <string name="dlt_dp">Delete Profile Picture</string>
     <string name="status">Status</string>
     <string name="type_your_info">Type new info</string>
+    <string name="next">Next</string>
 </resources>

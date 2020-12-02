@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.adapters;
+package com.hitesh.pigeon.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,10 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatsapp.model.Contacts;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.activities.ChatActivity;
-import com.hitesh.whatsapp.activities.MainActivity;
+import com.hitesh.pigeon.model.Contacts;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.activities.ChatActivity;
+import com.hitesh.pigeon.activities.MainActivity;
 
 import java.util.HashMap;
 import java.util.List;

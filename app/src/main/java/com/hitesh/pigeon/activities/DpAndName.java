@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.activities;
+package com.hitesh.pigeon.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,8 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.whatsapp.R;
-import com.hitesh.whatsapp.utility.LoadingDialog;
+import com.hitesh.pigeon.R;
+import com.hitesh.pigeon.utility.LoadingDialog;
 
 import java.util.HashMap;
 import java.util.Objects;

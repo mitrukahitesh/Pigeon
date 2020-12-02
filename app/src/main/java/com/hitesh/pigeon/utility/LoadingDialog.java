@@ -1,10 +1,10 @@
-package com.hitesh.whatsapp.utility;
+package com.hitesh.pigeon.utility;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-import com.hitesh.whatsapp.R;
+import com.hitesh.pigeon.R;
 
 public class LoadingDialog {
 

@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.model;
+package com.hitesh.pigeon.model;
 
 import android.net.Uri;
 

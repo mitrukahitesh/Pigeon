@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.fragments;
+package com.hitesh.pigeon.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.hitesh.whatsapp.R;
+import com.hitesh.pigeon.R;
 
 public class GroupsFragment extends Fragment {
 

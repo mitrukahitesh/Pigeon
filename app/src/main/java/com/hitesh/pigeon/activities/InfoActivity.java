@@ -1,4 +1,4 @@
-package com.hitesh.whatsapp.activities;
+package com.hitesh.pigeon.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -34,7 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
-import com.hitesh.whatsapp.R;
+import com.hitesh.pigeon.R;
 
 import java.util.Objects;
 
@@ -153,7 +153,19 @@ public class InfoActivity extends AppCompatActivity {
             changeDp.setVisibility(View.GONE);
             nameEdit.setVisibility(View.GONE);
             statusEdit.setVisibility(View.GONE);
+            phoneCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    makeCall(phone.getText().toString());
+                }
+            });
         }
+    }
+
+    private void makeCall(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + number));
+        startActivity(intent);
     }
 
     private void makeNameStatusEditable() {

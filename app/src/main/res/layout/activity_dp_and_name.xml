@@ -54,6 +54,7 @@
         android:letterSpacing="0.2"
         android:padding="4dp"
         android:text="@string/finish"
+        android:textSize="16sp"
         android:textAllCaps="false"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
