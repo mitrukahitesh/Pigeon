@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String LAST_SEEN = "LAST SEEN";
     public static final String CHATS = "CHATS";
     public static final String GROUPS = "GROUPS";
+    public static final String GROUP_ID = "GROUP_ID";
+    public static final String PARTICIPANTS = "PARTICIPANTS";
     public static final String EDITABLE = "EDITABLE";
     public static final String UID = "UID";
 

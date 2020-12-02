@@ -12,13 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.hitesh.pigeon.activities.InfoActivity"></activity>
-        <activity android:name="com.hitesh.pigeon.activities.GroupDetailsActivity" />
-        <activity android:name="com.hitesh.pigeon.activities.GroupCreationActivity" />
-        <activity android:name="com.hitesh.pigeon.activities.ChatActivity" />
-        <activity android:name="com.hitesh.pigeon.activities.DpAndName" />
-        <activity android:name="com.hitesh.pigeon.activities.LoginActivity" />
-        <activity android:name="com.hitesh.pigeon.activities.MainActivity">
+        <activity android:name=".activities.GroupInfoActivity"></activity>
+        <activity android:name=".activities.InfoActivity" />
+        <activity android:name=".activities.GroupDetailsActivity" />
+        <activity android:name=".activities.GroupCreationActivity" />
+        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.DpAndName" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -30,10 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.hitesh.pigeon.model.Messages;
 import com.hitesh.pigeon.R;
 import com.hitesh.pigeon.adapters.ChatAdapter;
 import com.hitesh.pigeon.adapters.ContactsAdapter;
+import com.hitesh.pigeon.model.Messages;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

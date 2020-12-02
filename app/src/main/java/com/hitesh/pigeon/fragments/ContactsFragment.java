@@ -29,6 +29,7 @@ public class ContactsFragment extends Fragment {
 
     private ContactsAdapter adapter;
     private final List<Contacts> contacts = new ArrayList<>();
+    private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
 
     public ContactsFragment() {
@@ -59,7 +60,7 @@ public class ContactsFragment extends Fragment {
     }
 
     private void addIfUserExists(final String name, final String number) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(MainActivity.USERS);
+        DatabaseReference reference = db.getReference().child(MainActivity.USERS);
         Query query = reference.orderByChild(MainActivity.PHONE).equalTo(number);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

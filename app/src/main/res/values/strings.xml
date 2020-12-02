@@ -11,6 +11,7 @@
     <string name="logout">Logout</string>
     <string name="dp_head">Profile picture and name</string>
     <string name="name">Type your name here</string>
+    <string name="group_name">Type group name here</string>
     <string name="finish">Finish</string>
     <string name="dp">Profile Picture</string>
     <string name="phone">Phone number</string>

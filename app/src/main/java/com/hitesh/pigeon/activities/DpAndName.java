@@ -41,6 +41,10 @@ public class DpAndName extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dp_and_name);
+        setReferences();
+    }
+
+    private void setReferences() {
         imageView = (CircleImageView) findViewById(R.id.dp);
         name = (EditText) findViewById(R.id.name);
         finish = (Button) findViewById(R.id.button);

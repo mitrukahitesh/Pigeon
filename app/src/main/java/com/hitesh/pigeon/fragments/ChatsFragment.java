@@ -82,7 +82,7 @@ public class ChatsFragment extends Fragment {
                 database
                         .getReference()
                         .child(MainActivity.USERS)
-                        .child(Objects.requireNonNull(MainActivity.mAuth.getUid()))
+                        .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
                         .child(MainActivity.CHATS);
         reference.addChildEventListener(new ChildEventListener() {
             @Override
