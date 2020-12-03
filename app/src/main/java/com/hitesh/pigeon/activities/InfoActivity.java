@@ -21,13 +21,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -140,7 +137,7 @@ public class InfoActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    dp.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.img, null));
+                                    dp.setImageResource(R.drawable.img);
                                 }
                             });
                 }
@@ -190,7 +187,7 @@ public class InfoActivity extends AppCompatActivity {
         nameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.setTitle("Enter new Name");
+                dialog.setTitle("Enter new name");
                 dialog.setIcon(R.drawable.ic_baseline_edit_24);
                 newVal.setHint(MainActivity.NAME);
                 dialog.show();
@@ -199,7 +196,7 @@ public class InfoActivity extends AppCompatActivity {
         statusEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.setTitle("Enter new Status");
+                dialog.setTitle("Enter new status");
                 dialog.setIcon(R.drawable.ic_baseline_edit_24);
                 newVal.setHint(MainActivity.STATUS);
                 dialog.show();
@@ -213,21 +210,7 @@ public class InfoActivity extends AppCompatActivity {
                 .child(MainActivity.USERS)
                 .child(uid)
                 .child(attr)
-                .setValue(val)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            if (attr.equals(MainActivity.NAME)) {
-                                name.setText(val);
-                            } else {
-                                status.setText(val);
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Some error occurred", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                .setValue(val);
     }
 
     @Override

@@ -60,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String TIME = "TIME";
     public static final String ONLINE = "online";
     public static final String LAST_SEEN_SMALL = "last seen ";
-    public static final int TEXT_MSG = 0;
-    public static final int MEDIA_MSG = 1;
+    public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String IS_ADMIN = "IS_ADMIN";
+//    public static final int TEXT_MSG = 0;
+//    public static final int MEDIA_MSG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

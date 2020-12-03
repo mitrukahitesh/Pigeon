@@ -23,4 +23,7 @@
     <string name="status">Status</string>
     <string name="type_your_info">Type new info</string>
     <string name="next">Next</string>
+    <string name="description">Description</string>
+    <string name="participants">Participants</string>
+    <string name="group_admin">Group Admin</string>
 </resources>

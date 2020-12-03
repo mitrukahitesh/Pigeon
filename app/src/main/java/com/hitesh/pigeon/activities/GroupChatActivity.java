@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,10 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.hitesh.pigeon.activities.MainActivity.GROUPS;
+import static com.hitesh.pigeon.activities.MainActivity.IS_ADMIN;
 import static com.hitesh.pigeon.activities.MainActivity.MESSAGE;
+import static com.hitesh.pigeon.activities.MainActivity.NAME;
 import static com.hitesh.pigeon.activities.MainActivity.SENDER;
 import static com.hitesh.pigeon.activities.MainActivity.TIME;
 import static com.hitesh.pigeon.activities.MainActivity.TYPE;
@@ -42,6 +46,7 @@ import static com.hitesh.pigeon.activities.MainActivity.TYPE;
 public class GroupChatActivity extends AppCompatActivity {
 
     private String name, groupId;
+    private Boolean isAdmin;
     private Uri dpUri;
     private Intent intent;
     private TextView nameGroup, numOfMembers;
@@ -51,12 +56,16 @@ public class GroupChatActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private final List<Messages> messages = new ArrayList<>();
     private GroupChatAdapter adapter;
+    private LinearLayout nameAndLastSeen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         setReferences();
+        setValues();
+        setListeners();
+        fetchMessages();
     }
 
     private void setReferences() {
@@ -72,8 +81,7 @@ public class GroupChatActivity extends AppCompatActivity {
         send = findViewById(R.id.send);
         intent = getIntent();
         getIntentContent();
-        setListeners();
-        fetchMessages();
+        nameAndLastSeen = findViewById(R.id.nameAndLastSeen);
     }
 
     private void fetchMessages() {
@@ -146,6 +154,32 @@ public class GroupChatActivity extends AppCompatActivity {
                 sendMessage();
             }
         });
+        nameAndLastSeen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroupChatActivity.this, GroupInfoActivity.class);
+                intent.putExtra(MainActivity.GROUP_ID, groupId);
+                intent.putExtra(MainActivity.IS_ADMIN, isAdmin);
+                startActivity(intent);
+            }
+        });
+        db.getReference()
+                .child(GROUPS)
+                .child(groupId)
+                .child(NAME)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            nameGroup.setText(Objects.requireNonNull(dataSnapshot.getValue()).toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void sendMessage() {
@@ -165,7 +199,7 @@ public class GroupChatActivity extends AppCompatActivity {
         name = intent.getStringExtra(MainActivity.NAME);
         dpUri = Uri.parse(intent.getStringExtra(MainActivity.DP));
         groupId = intent.getStringExtra(MainActivity.GROUP_ID);
-        setValues();
+        isAdmin = intent.getBooleanExtra(IS_ADMIN, false);
     }
 
     private void setValues() {

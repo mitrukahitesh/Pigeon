@@ -22,6 +22,7 @@ import com.hitesh.pigeon.utility.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,8 +30,6 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
 
     private CircleImageView dp;
     private EditText name;
-    private Button finish;
-    private Intent mIntent;
     private ArrayList<String> uids;
     private String groupId;
     private LoadingDialog dialog;
@@ -45,12 +44,12 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
     }
 
     private void setReferences() {
-        mIntent = getIntent();
+        Intent mIntent = getIntent();
         uids = mIntent.getStringArrayListExtra(MainActivity.PARTICIPANTS);
         groupId = mIntent.getStringExtra(MainActivity.GROUP_ID);
         dp = findViewById(R.id.dp);
         name = findViewById(R.id.name);
-        finish = findViewById(R.id.button);
+        Button finish = findViewById(R.id.button);
         dp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +63,7 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (name.getText().toString().trim().equals(""))
                     return;
+                name.setEnabled(false);
                 dialog = new LoadingDialog(GroupDpAndNameActivity.this);
                 dialog.start();
                 storeDp();
@@ -86,7 +86,7 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(MainActivity.USERS);
         HashMap<String, Object> participants = new HashMap<>();
         participants.put(MainActivity.mAuth.getUid(), true);
-        reference.child(MainActivity.mAuth.getUid()).child(MainActivity.GROUPS).child(groupId).setValue(true);
+        reference.child(Objects.requireNonNull(MainActivity.mAuth.getUid())).child(MainActivity.GROUPS).child(groupId).setValue(true);
         while (uids.contains(MainActivity.mAuth.getUid()))
             uids.remove(MainActivity.mAuth.getUid());
         for (String user : uids) {
@@ -95,6 +95,7 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
         }
         reference = FirebaseDatabase.getInstance().getReference().child(MainActivity.GROUPS).child(groupId);
         reference.child(MainActivity.NAME).setValue(name.getText().toString());
+        reference.child(MainActivity.DESCRIPTION).setValue(name.getText().toString());
         reference.child(MainActivity.PARTICIPANTS).updateChildren(participants).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

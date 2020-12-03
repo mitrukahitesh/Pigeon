@@ -20,19 +20,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.hitesh.pigeon.R;
 import com.hitesh.pigeon.activities.MainActivity;
 import com.hitesh.pigeon.adapters.GroupsAdapter;
-import com.hitesh.pigeon.model.AvailableGroups;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GroupsFragment extends Fragment {
 
-    private final List<AvailableGroups> groups = new ArrayList<>();
+    private final List<GroupsAdapter.Group> groups = new ArrayList<>();
     private GroupsAdapter adapter;
     private FirebaseDatabase database;
 
@@ -63,13 +62,13 @@ public class GroupsFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference()
                 .child(MainActivity.USERS)
-                .child(MainActivity.mAuth.getUid())
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
                 .child(MainActivity.GROUPS);
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot.exists()) {
-                    AvailableGroups group = new AvailableGroups(dataSnapshot.getKey());
+                    GroupsAdapter.Group group = new GroupsAdapter.Group(dataSnapshot.getKey(), (Boolean) dataSnapshot.getValue());
                     getGroupDp(group);
                 }
             }
@@ -96,7 +95,7 @@ public class GroupsFragment extends Fragment {
         });
     }
 
-    private void getGroupDp(final AvailableGroups group) {
+    private void getGroupDp(final GroupsAdapter.Group group) {
         FirebaseStorage.getInstance().getReference()
                 .child(MainActivity.DP)
                 .child(group.groupId)
@@ -106,29 +105,8 @@ public class GroupsFragment extends Fragment {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful())
                             group.dpUri = task.getResult();
-                        getNameOfGroup(group);
-                    }
-                });
-    }
-
-    private void getNameOfGroup(final AvailableGroups group) {
-        database.getReference()
-                .child(MainActivity.GROUPS)
-                .child(group.groupId)
-                .child(MainActivity.NAME)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            group.name = dataSnapshot.getValue().toString();
-                            groups.add(group);
-                            adapter.notifyItemInserted(groups.size() - 1);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        groups.add(group);
+                        adapter.notifyItemInserted(groups.size() - 1);
                     }
                 });
     }
