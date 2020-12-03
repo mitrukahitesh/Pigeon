@@ -12,14 +12,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.GroupInfoActivity"></activity>
-        <activity android:name=".activities.InfoActivity" />
-        <activity android:name=".activities.GroupDetailsActivity" />
-        <activity android:name=".activities.GroupCreationActivity" />
-        <activity android:name=".activities.ChatActivity" />
-        <activity android:name=".activities.DpAndName" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.GroupChatActivity"></activity>
+        <activity
+            android:name=".activities.GroupDpAndNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.InfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GroupCreationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DpAndName"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

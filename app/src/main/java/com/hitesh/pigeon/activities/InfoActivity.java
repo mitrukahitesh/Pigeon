@@ -43,12 +43,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InfoActivity extends AppCompatActivity {
 
     private String uid;
-    private boolean editable;
     private CircleImageView dp;
-    private ImageView changeDp;
     private TextView phone, name, status;
-    private ImageButton phoneCall, nameEdit, statusEdit;
-    private Button dltDp;
+    private ImageButton nameEdit;
+    private ImageButton statusEdit;
     private String x = null; //store new value
 
     @Override
@@ -95,16 +93,16 @@ public class InfoActivity extends AppCompatActivity {
     private void setReferences() {
         Intent mIntent = getIntent();
         uid = mIntent.getStringExtra(MainActivity.UID);
-        editable = mIntent.getBooleanExtra(MainActivity.EDITABLE, false);
+        boolean editable = mIntent.getBooleanExtra(MainActivity.EDITABLE, false);
         dp = findViewById(R.id.dp);
-        changeDp = findViewById(R.id.change_dp);
+        ImageView changeDp = findViewById(R.id.change_dp);
         phone = findViewById(R.id.number);
         name = findViewById(R.id.name);
         status = findViewById(R.id.status);
-        phoneCall = findViewById(R.id.phoneCall);
+        ImageButton phoneCall = findViewById(R.id.phoneCall);
         nameEdit = findViewById(R.id.nameEdit);
         statusEdit = findViewById(R.id.statusEdit);
-        dltDp = findViewById(R.id.dlt_dp);
+        Button dltDp = findViewById(R.id.dlt_dp);
         phone.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

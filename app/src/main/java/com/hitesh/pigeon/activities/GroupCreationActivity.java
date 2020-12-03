@@ -61,7 +61,7 @@ public class GroupCreationActivity extends AppCompatActivity {
                     Toast.makeText(GroupCreationActivity.this, "Select at least 2", Toast.LENGTH_LONG).show();
                     return;
                 }
-                final Intent intent = new Intent(GroupCreationActivity.this, GroupInfoActivity.class);
+                final Intent intent = new Intent(GroupCreationActivity.this, GroupDpAndNameActivity.class);
                 intent.putExtra(MainActivity.PARTICIPANTS, selected);
                 final DatabaseReference reference = FirebaseDatabase.getInstance()
                         .getReference()

@@ -41,10 +41,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.hitesh.pigeon.activities.MainActivity.LAST_SEEN;
+import static com.hitesh.pigeon.activities.MainActivity.LAST_SEEN_SMALL;
+import static com.hitesh.pigeon.activities.MainActivity.MESSAGE;
+import static com.hitesh.pigeon.activities.MainActivity.ONLINE;
+import static com.hitesh.pigeon.activities.MainActivity.SENDER;
+import static com.hitesh.pigeon.activities.MainActivity.TIME;
+import static com.hitesh.pigeon.activities.MainActivity.TYPE;
 import static com.hitesh.pigeon.activities.MainActivity.mAuth;
 
 public class ChatActivity extends AppCompatActivity {
@@ -52,29 +60,21 @@ public class ChatActivity extends AppCompatActivity {
     private Intent mIntent;
     private CircleImageView dp;
     private TextView name, lastSeen;
-    private RecyclerView recycler;
     private EditText msg;
-    private LinearLayout nameAndLastSeen;
-    private ImageButton send;
     private FirebaseDatabase database;
-    private String _name, number, uid, uri, chatId;
-    public static final String ONLINE = "online";
-    public static final String LAST_SEEN = "last seen ";
-    public static final int TEXT_MSG = 0;
-    public static final int MEDIA_MSG = 1;
-    public static final String SENDER = "SENDER";
-    public static final String MESSAGE = "MESSAGE";
-    public static final String TYPE = "TYPE";
-    public static final String TIME = "TIME";
+    private String _name;
+    private String uid;
+    private String uri;
+    private String chatId;
     private ChatAdapter adapter;
-    private List<Messages> messages = new ArrayList<>();
+    private final List<Messages> messages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setTitle("");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         setReferences();
         extractIntentData();
         setInfo();
@@ -101,7 +101,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private void extractIntentData() {
         _name = mIntent.getStringExtra(ContactsAdapter.RECEIVER_NAME);
-        number = mIntent.getStringExtra(ContactsAdapter.RECEIVER_NUMBER);
         uid = mIntent.getStringExtra(ContactsAdapter.RECEIVER_UID);
         uri = mIntent.getStringExtra(ContactsAdapter.RECEIVER_DP_URI);
     }
@@ -110,14 +109,14 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference reference =
                 database.getReference()
                         .child(MainActivity.USERS)
-                        .child(MainActivity.mAuth.getUid())
+                        .child(Objects.requireNonNull(mAuth.getUid()))
                         .child(MainActivity.CHATS);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        if (childSnapshot.getKey().equals(uid)) {
+                        if (Objects.equals(childSnapshot.getKey(), uid)) {
                             chatId = (String) childSnapshot.getValue();
                             fetchChat();
                             return;
@@ -172,12 +171,12 @@ public class ChatActivity extends AppCompatActivity {
                     Long type = null;
                     boolean nullExits = false;
                     if (dataSnapshot.child(SENDER).exists()) {
-                        sender = dataSnapshot.child(SENDER).getValue().toString();
+                        sender = Objects.requireNonNull(dataSnapshot.child(SENDER).getValue()).toString();
                     } else {
                         nullExits = true;
                     }
                     if (dataSnapshot.child(MESSAGE).exists()) {
-                        msg = dataSnapshot.child(MESSAGE).getValue().toString();
+                        msg = Objects.requireNonNull(dataSnapshot.child(MESSAGE).getValue()).toString();
                     } else {
                         nullExits = true;
                     }
@@ -193,7 +192,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                     if (!nullExits) {
                         messages.add(new Messages(sender, msg, type, time));
-                        adapter.notifyDataSetChanged();
+                        adapter.notifyItemInserted(messages.size() - 1);
                     }
                 }
             }
@@ -224,7 +223,7 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         mIntent = getIntent();
         dp = findViewById(R.id.dp);
-        nameAndLastSeen = findViewById(R.id.nameAndLastSeen);
+        LinearLayout nameAndLastSeen = findViewById(R.id.nameAndLastSeen);
         nameAndLastSeen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,12 +233,12 @@ public class ChatActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         lastSeen = findViewById(R.id.lastSeen);
         lastSeen.setVisibility(View.GONE);
-        recycler = findViewById(R.id.recycler);
+        RecyclerView recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ChatAdapter(this, messages);
         recycler.setAdapter(adapter);
         msg = findViewById(R.id.message);
-        send = findViewById(R.id.send);
+        ImageButton send = findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,7 +293,7 @@ public class ChatActivity extends AppCompatActivity {
     private void setLastSeen() {
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference()
-                .child(MainActivity.LAST_SEEN)
+                .child(LAST_SEEN)
                 .child(uid);
         reference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -302,10 +301,12 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     lastSeen.setVisibility(View.VISIBLE);
+                    if (snapshot.getValue() == null)
+                        return;
                     if (((Long) snapshot.getValue()) == 0)
                         lastSeen.setText(ONLINE);
                     else
-                        lastSeen.setText(LAST_SEEN + getDate(snapshot.getValue()));
+                        lastSeen.setText(LAST_SEEN_SMALL + getDate(snapshot.getValue()));
                 }
             }
 

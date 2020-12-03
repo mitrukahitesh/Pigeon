@@ -51,8 +51,17 @@ public class MainActivity extends AppCompatActivity {
     public static final String GROUPS = "GROUPS";
     public static final String GROUP_ID = "GROUP_ID";
     public static final String PARTICIPANTS = "PARTICIPANTS";
+    public static final String MESSAGES = "MESSAGES";
     public static final String EDITABLE = "EDITABLE";
     public static final String UID = "UID";
+    public static final String SENDER = "SENDER";
+    public static final String MESSAGE = "MESSAGE";
+    public static final String TYPE = "TYPE";
+    public static final String TIME = "TIME";
+    public static final String ONLINE = "online";
+    public static final String LAST_SEEN_SMALL = "last seen ";
+    public static final int TEXT_MSG = 0;
+    public static final int MEDIA_MSG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

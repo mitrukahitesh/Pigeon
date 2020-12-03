@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class GroupInfoActivity extends AppCompatActivity {
+public class GroupDpAndNameActivity extends AppCompatActivity {
 
     private CircleImageView dp;
     private EditText name;
@@ -41,7 +40,7 @@ public class GroupInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_info);
+        setContentView(R.layout.activity_group_dp_and_name);
         setReferences();
     }
 
@@ -65,7 +64,7 @@ public class GroupInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (name.getText().toString().trim().equals(""))
                     return;
-                dialog = new LoadingDialog(GroupInfoActivity.this);
+                dialog = new LoadingDialog(GroupDpAndNameActivity.this);
                 dialog.start();
                 storeDp();
                 storeGroupData();
@@ -86,22 +85,21 @@ public class GroupInfoActivity extends AppCompatActivity {
     private void storeGroupData() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(MainActivity.USERS);
         HashMap<String, Object> participants = new HashMap<>();
+        participants.put(MainActivity.mAuth.getUid(), true);
+        reference.child(MainActivity.mAuth.getUid()).child(MainActivity.GROUPS).child(groupId).setValue(true);
+        while (uids.contains(MainActivity.mAuth.getUid()))
+            uids.remove(MainActivity.mAuth.getUid());
         for (String user : uids) {
-            participants.put(user, true);
-            reference.child(user).child(MainActivity.GROUPS).child(groupId).setValue(true);
+            participants.put(user, false);
+            reference.child(user).child(MainActivity.GROUPS).child(groupId).setValue(false);
         }
         reference = FirebaseDatabase.getInstance().getReference().child(MainActivity.GROUPS).child(groupId);
         reference.child(MainActivity.NAME).setValue(name.getText().toString());
         reference.child(MainActivity.PARTICIPANTS).updateChildren(participants).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(GroupInfoActivity.this, "Group created successfully", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(GroupInfoActivity.this, "Some error occurred", Toast.LENGTH_LONG).show();
-                }
-                finish();
                 dialog.stop();
+                finish();
             }
         });
     }

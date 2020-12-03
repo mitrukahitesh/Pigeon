@@ -27,12 +27,17 @@ import com.hitesh.pigeon.model.AvailableChats;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.hitesh.pigeon.activities.MainActivity.MESSAGE;
+import static com.hitesh.pigeon.activities.MainActivity.TIME;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
 
@@ -40,6 +45,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
     private final List<AvailableChats> availableChats;
     private final HashMap<String, String> lastMessage = new HashMap<>();
     private final HashMap<String, String> timeOfMessage = new HashMap<>();
+    private final Set<String> lastMessageListenerSet = new HashSet<>();
 
     public ChatsAdapter(Context context, List<AvailableChats> availableChats) {
         this.context = context;
@@ -84,6 +90,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
     }
 
     private void fetchLastMessage(final int position) {
+        if (lastMessageListenerSet.contains(availableChats.get(position).chatId))
+            return;
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child(MainActivity.CHATS)
@@ -92,8 +100,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         if (dataSnapshot.exists()) {
-                            lastMessage.put(availableChats.get(position).number, Objects.requireNonNull(dataSnapshot.child(ChatActivity.MESSAGE).getValue()).toString());
-                            timeOfMessage.put(availableChats.get(position).number, getDate((Long) dataSnapshot.child(ChatActivity.TIME).getValue()));
+                            lastMessage.put(availableChats.get(position).number, Objects.requireNonNull(dataSnapshot.child(MESSAGE).getValue()).toString());
+                            timeOfMessage.put(availableChats.get(position).number, getDate((Long) dataSnapshot.child(TIME).getValue()));
                             notifyItemChanged(position);
                         }
                     }
@@ -118,6 +126,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
 
                     }
                 });
+        lastMessageListenerSet.add(availableChats.get(position).chatId);
     }
 
     private String getDate(Long value) {
@@ -145,7 +154,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CustomVH> {
             lastMsg = itemView.findViewById(R.id.lastMsg);
             time = itemView.findViewById(R.id.time);
             box = itemView.findViewById(R.id.box);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            box.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startChat(getAdapterPosition());
