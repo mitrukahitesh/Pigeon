@@ -2,6 +2,8 @@ package com.hitesh.pigeon.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -29,12 +31,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.hitesh.pigeon.activities.MainActivity.setLoginStatus;
+
 public class GroupCreationActivity extends AppCompatActivity {
 
     private GroupCreationAdapter adapter;
     private final List<Contacts> contacts = new ArrayList<>();
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     public static ActionBar actionBar;
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,5 +115,26 @@ public class GroupCreationActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Handler handler = new Handler(Looper.myLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!dontMakeOnline)
+                    setLoginStatus(true);
+                dontMakeOnline = false;
+            }
+        }, 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        dontMakeOnline = true;
+        super.onStop();
+        setLoginStatus(false);
     }
 }

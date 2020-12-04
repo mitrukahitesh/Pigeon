@@ -54,6 +54,7 @@ import static com.hitesh.pigeon.activities.MainActivity.SENDER;
 import static com.hitesh.pigeon.activities.MainActivity.TIME;
 import static com.hitesh.pigeon.activities.MainActivity.TYPE;
 import static com.hitesh.pigeon.activities.MainActivity.mAuth;
+import static com.hitesh.pigeon.activities.MainActivity.setLoginStatus;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -69,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatAdapter adapter;
     private final List<Messages> messages = new ArrayList<>();
     private RecyclerView recycler;
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,15 +91,18 @@ public class ChatActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                MainActivity.setLoginStatus(true);
+                if (!dontMakeOnline)
+                    setLoginStatus(true);
+                dontMakeOnline = false;
             }
         }, 1000);
     }
 
     @Override
     protected void onStop() {
+        dontMakeOnline = true;
         super.onStop();
-        MainActivity.setLoginStatus(false);
+        setLoginStatus(false);
     }
 
     private void extractIntentData() {

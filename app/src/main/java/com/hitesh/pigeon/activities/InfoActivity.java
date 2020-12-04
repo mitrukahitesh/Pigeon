@@ -37,6 +37,8 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.hitesh.pigeon.activities.MainActivity.setLoginStatus;
+
 public class InfoActivity extends AppCompatActivity {
 
     private String uid;
@@ -45,6 +47,7 @@ public class InfoActivity extends AppCompatActivity {
     private ImageButton nameEdit;
     private ImageButton statusEdit;
     private String x = null; //store new value
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,14 +255,17 @@ public class InfoActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                MainActivity.setLoginStatus(true);
+                if (!dontMakeOnline)
+                    setLoginStatus(true);
+                dontMakeOnline = false;
             }
         }, 1000);
     }
 
     @Override
     protected void onStop() {
+        dontMakeOnline = true;
         super.onStop();
-        MainActivity.setLoginStatus(false);
+        setLoginStatus(false);
     }
 }

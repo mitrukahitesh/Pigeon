@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LAST_SEEN_SMALL = "last seen ";
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final String IS_ADMIN = "IS_ADMIN";
+    private boolean dontMakeOnline;
 //    public static final int TEXT_MSG = 0;
 //    public static final int MEDIA_MSG = 1;
 
@@ -85,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    setLoginStatus(true);
+                    if (!dontMakeOnline)
+                        setLoginStatus(true);
+                    dontMakeOnline = false;
                 }
             }, 1000);
         }
@@ -93,8 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (mAuth.getCurrentUser() != null)
+        if (mAuth.getCurrentUser() != null) {
+            dontMakeOnline = true;
             setLoginStatus(false);
+        }
         super.onStop();
     }
 

@@ -49,6 +49,7 @@ import static com.hitesh.pigeon.activities.MainActivity.GROUP_ID;
 import static com.hitesh.pigeon.activities.MainActivity.IS_ADMIN;
 import static com.hitesh.pigeon.activities.MainActivity.NAME;
 import static com.hitesh.pigeon.activities.MainActivity.PARTICIPANTS;
+import static com.hitesh.pigeon.activities.MainActivity.setLoginStatus;
 
 public class GroupInfoActivity extends AppCompatActivity {
 
@@ -63,6 +64,7 @@ public class GroupInfoActivity extends AppCompatActivity {
     private final List<Participants> participants = new ArrayList<>();
     private ParticipantsAdapter adapter;
     private String x = null; //store new value
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,14 +267,17 @@ public class GroupInfoActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                MainActivity.setLoginStatus(true);
+                if (!dontMakeOnline)
+                    setLoginStatus(true);
+                dontMakeOnline = false;
             }
         }, 1000);
     }
 
     @Override
     protected void onStop() {
+        dontMakeOnline = true;
         super.onStop();
-        MainActivity.setLoginStatus(false);
+        setLoginStatus(false);
     }
 }

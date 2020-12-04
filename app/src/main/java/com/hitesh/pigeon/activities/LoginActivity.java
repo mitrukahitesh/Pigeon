@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private String verID;
     private String phoneNum;
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

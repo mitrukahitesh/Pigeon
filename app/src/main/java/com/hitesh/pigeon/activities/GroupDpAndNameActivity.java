@@ -3,6 +3,8 @@ package com.hitesh.pigeon.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,11 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 import com.hitesh.pigeon.R;
 import com.hitesh.pigeon.utility.LoadingDialog;
 
@@ -25,6 +29,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.hitesh.pigeon.activities.MainActivity.setLoginStatus;
 
 public class GroupDpAndNameActivity extends AppCompatActivity {
 
@@ -35,6 +41,7 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
     private LoadingDialog dialog;
     public static final int REQ_CODE = 1;
     private Uri dpUri = null;
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +86,19 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
                 .getReference()
                 .child(MainActivity.DP)
                 .child(groupId)
-                .putFile(dpUri);
+                .putFile(dpUri)
+                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        dialog.stop();
+                    }
+                })
+                .addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        dialog.stop();
+                    }
+                });
     }
 
     private void storeGroupData() {
@@ -99,7 +118,6 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
         reference.child(MainActivity.PARTICIPANTS).updateChildren(participants).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                dialog.stop();
                 finish();
             }
         });
@@ -114,5 +132,26 @@ public class GroupDpAndNameActivity extends AppCompatActivity {
                 Glide.with(this).load(dpUri).into(dp);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Handler handler = new Handler(Looper.myLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!dontMakeOnline)
+                    setLoginStatus(true);
+                dontMakeOnline = false;
+            }
+        }, 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        dontMakeOnline = true;
+        super.onStop();
+        setLoginStatus(false);
     }
 }

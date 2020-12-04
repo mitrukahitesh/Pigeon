@@ -19,11 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.hitesh.pigeon.R;
 import com.hitesh.pigeon.adapters.GroupChatAdapter;
 import com.hitesh.pigeon.model.Messages;
@@ -35,6 +37,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.hitesh.pigeon.activities.MainActivity.DP;
 import static com.hitesh.pigeon.activities.MainActivity.GROUPS;
 import static com.hitesh.pigeon.activities.MainActivity.IS_ADMIN;
 import static com.hitesh.pigeon.activities.MainActivity.MESSAGE;
@@ -42,6 +45,7 @@ import static com.hitesh.pigeon.activities.MainActivity.NAME;
 import static com.hitesh.pigeon.activities.MainActivity.SENDER;
 import static com.hitesh.pigeon.activities.MainActivity.TIME;
 import static com.hitesh.pigeon.activities.MainActivity.TYPE;
+import static com.hitesh.pigeon.activities.MainActivity.setLoginStatus;
 
 public class GroupChatActivity extends AppCompatActivity {
 
@@ -58,6 +62,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private GroupChatAdapter adapter;
     private LinearLayout nameAndLastSeen;
     private RecyclerView recyclerView;
+    private boolean dontMakeOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,18 +204,34 @@ public class GroupChatActivity extends AppCompatActivity {
 
     private void getIntentContent() {
         name = intent.getStringExtra(MainActivity.NAME);
-        dpUri = Uri.parse(intent.getStringExtra(MainActivity.DP));
+        if (intent.getStringExtra(MainActivity.DP) != null)
+            dpUri = Uri.parse(intent.getStringExtra(MainActivity.DP));
         groupId = intent.getStringExtra(MainActivity.GROUP_ID);
         isAdmin = intent.getBooleanExtra(IS_ADMIN, false);
     }
 
     private void setValues() {
         nameGroup.setText(name);
-        if (dpUri == null)
+        if (dpUri == null) {
             dp.setImageResource(R.drawable.img);
-        else
+            tryToGetDp();
+        } else
             Glide.with(this).load(dpUri).into(dp);
         setNumberOfMembers();
+    }
+
+    private void tryToGetDp() {
+        FirebaseStorage.getInstance()
+                .getReference()
+                .child(DP)
+                .child(groupId)
+                .getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(GroupChatActivity.this).load(uri).into(dp);
+                    }
+                });
     }
 
     private void setNumberOfMembers() {
@@ -241,14 +262,17 @@ public class GroupChatActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                MainActivity.setLoginStatus(true);
+                if (!dontMakeOnline)
+                    setLoginStatus(true);
+                dontMakeOnline = false;
             }
         }, 1000);
     }
 
     @Override
     protected void onStop() {
+        dontMakeOnline = true;
         super.onStop();
-        MainActivity.setLoginStatus(false);
+        setLoginStatus(false);
     }
 }

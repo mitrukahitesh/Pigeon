@@ -207,7 +207,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomVH> 
     private void startGroupChat(int adapterPosition) {
         Intent intent = new Intent(context, GroupChatActivity.class);
         intent.putExtra(MainActivity.NAME, nameOfGroup.get(groups.get(adapterPosition).groupId));
-        intent.putExtra(MainActivity.DP, groups.get(adapterPosition).dpUri.toString());
+        if (groups.get(adapterPosition).dpUri != null)
+            intent.putExtra(MainActivity.DP, groups.get(adapterPosition).dpUri.toString());
         intent.putExtra(MainActivity.GROUP_ID, groups.get(adapterPosition).groupId);
         intent.putExtra(MainActivity.IS_ADMIN, groups.get(adapterPosition).isAdmin);
         context.startActivity(intent);
