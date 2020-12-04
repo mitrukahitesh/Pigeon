@@ -1,8 +1,5 @@
 package com.hitesh.pigeon.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(code.getText().toString().trim().length() == 6) {
+                if (code.getText().toString().trim().length() == 6) {
                     progressBar.setVisibility(View.VISIBLE);
                     hideKeyboard();
                     PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verID, code.getText().toString());
@@ -77,11 +77,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startLoginProcess() {
-        if(number.getText() == null)
+        if (number.getText() == null)
             return;
-        if(number.getText().toString().equals(""))
+        if (number.getText().toString().equals(""))
             return;
         phoneNum = number.getText().toString().trim();
+        phoneNum = phoneNum.replace(" ", "");
+        phoneNum = phoneNum.replace("-", "");
+        phoneNum = phoneNum.replace("(", "");
+        phoneNum = phoneNum.replace(")", "");
+        if (phoneNum.trim().equals(""))
+            return;
         hideKeyboard();
         progressBar.setVisibility(View.VISIBLE);
         PhoneAuthOptions authOptions = PhoneAuthOptions.newBuilder(MainActivity.mAuth)
@@ -130,12 +136,11 @@ public class LoginActivity extends AppCompatActivity {
     private final OnCompleteListener<AuthResult> authResultOnCompleteListener = new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 progressBar.setVisibility(View.GONE);
                 setDpAndName();
                 LoginActivity.this.finish();
-            }
-            else {
+            } else {
                 Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
