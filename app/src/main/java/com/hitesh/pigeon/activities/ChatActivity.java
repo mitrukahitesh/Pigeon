@@ -68,6 +68,7 @@ public class ChatActivity extends AppCompatActivity {
     private String chatId;
     private ChatAdapter adapter;
     private final List<Messages> messages = new ArrayList<>();
+    private RecyclerView recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +194,7 @@ public class ChatActivity extends AppCompatActivity {
                     if (!nullExits) {
                         messages.add(new Messages(sender, msg, type, time));
                         adapter.notifyItemInserted(messages.size() - 1);
+                        recycler.scrollToPosition(messages.size() - 1);
                     }
                 }
             }
@@ -233,7 +235,7 @@ public class ChatActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         lastSeen = findViewById(R.id.lastSeen);
         lastSeen.setVisibility(View.GONE);
-        RecyclerView recycler = findViewById(R.id.recycler);
+        recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ChatAdapter(this, messages);
         recycler.setAdapter(adapter);

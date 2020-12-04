@@ -57,6 +57,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private final List<Messages> messages = new ArrayList<>();
     private GroupChatAdapter adapter;
     private LinearLayout nameAndLastSeen;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
     private void setReferences() {
         db = FirebaseDatabase.getInstance();
-        RecyclerView recyclerView = findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new GroupChatAdapter(this, messages);
         recyclerView.setAdapter(adapter);
@@ -121,6 +122,7 @@ public class GroupChatActivity extends AppCompatActivity {
                             if (!nullExits) {
                                 messages.add(new Messages(sender, msg, type, time));
                                 adapter.notifyItemInserted(messages.size() - 1);
+                                recyclerView.smoothScrollToPosition(messages.size() - 1);
                             }
                         }
                     }

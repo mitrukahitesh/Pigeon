@@ -62,6 +62,8 @@ public class ChatsFragment extends Fragment {
     }
 
     private void initialSetup() {
+        if (FirebaseAuth.getInstance().getUid() == null)
+            return;
         database = FirebaseDatabase.getInstance();
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ChatsAdapter(getContext(), availableChats);
