@@ -1,7 +1,7 @@
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("H:\\codes\\projects\\PigeonNotif\\nodejs\\private_files\\whatsapp-clone-aa746-firebase-adminsdk-o4z5u-0c94c0af2e.json");
+var serviceAccount = require("H:\\codes\\projects\\Pigeon\\nodejs\\private_files\\whatsapp-clone-aa746-firebase-adminsdk-o4z5u-0c94c0af2e.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
