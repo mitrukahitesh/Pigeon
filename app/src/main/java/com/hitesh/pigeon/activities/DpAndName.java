@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hitesh.pigeon.R;
@@ -73,22 +74,30 @@ public class DpAndName extends AppCompatActivity {
     }
 
     private void storeName() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child(MainActivity.USERS)
                 .child(Objects.requireNonNull(MainActivity.mAuth.getUid()));
-        HashMap<String, Object> userDetail = new HashMap<>();
+        final HashMap<String, Object> userDetail = new HashMap<>();
         userDetail.put(MainActivity.NAME, name.getText().toString().trim());
         userDetail.put(MainActivity.PHONE, phoneNum);
         userDetail.put(MainActivity.STATUS, MainActivity.INITIAL_STATUS);
-        reference.updateChildren(userDetail).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                loadingDialog.stop();
-                if (!task.isSuccessful()) {
-                    MainActivity.mAuth.signOut();
-                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    userDetail.put(MainActivity.TOKEN, task.getResult());
+                    reference.updateChildren(userDetail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            loadingDialog.stop();
+                            if (!task.isSuccessful()) {
+                                MainActivity.mAuth.signOut();
+                                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                            finish();
+                        }
+                    });
                 }
-                finish();
             }
         });
     }

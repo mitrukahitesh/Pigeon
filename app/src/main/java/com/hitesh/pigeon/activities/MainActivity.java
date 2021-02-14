@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String LAST_SEEN_SMALL = "last seen ";
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final String IS_ADMIN = "IS_ADMIN";
+    public static final String TOKEN = "TOKEN";
+    public static final String NOTIFICATION = "NOTIFICATION";
     private boolean dontMakeOnline;
 //    public static final int TEXT_MSG = 0;
 //    public static final int MEDIA_MSG = 1;
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() == null) {
             setUser();
         }
+
     }
 
     @Override

@@ -271,6 +271,7 @@ public class ChatActivity extends AppCompatActivity {
             msgInfo.put(TYPE, 0);
             msgInfo.put(TIME, System.currentTimeMillis());
             database.getReference().child(MainActivity.CHATS).child(chatId).push().updateChildren(msgInfo);
+            database.getReference().child(MainActivity.NOTIFICATION).push().setValue(uid);
         }
     }
 
